@@ -22,6 +22,10 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
     });
   }
 
+// CardKeuangan(
+//                             description: e.description,
+//                             amount: e.amount,
+//                           )
   @override
   void initState() {
     super.initState();
@@ -39,14 +43,14 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
                     Color.fromARGB(255, 6, 22, 236),
                   ),
                 )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: listData
-                      .map((e) => CardKeuangan(
-                            description: e.description,
-                            amount: e.amount,
-                          ))
-                      .toList(),
+              : ListView.builder(
+                  itemBuilder: ((context, index) {
+                    return CardKeuangan(
+                      description: listData[index].description,
+                      amount: listData[index].amount,
+                    );
+                  }),
+                  itemCount: listData.length,
                 ),
         ),
       ),

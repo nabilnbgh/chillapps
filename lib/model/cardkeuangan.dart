@@ -36,26 +36,20 @@ class CardKeuangan extends StatelessWidget {
     return Card(
       elevation: 20,
       color: const Color.fromARGB(255, 47, 56, 85),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              description,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            Text(
-              formatToIDR(amount),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ],
+      child: ListTile(
+        enabled: false,
+        onTap: () {},
+        title: Text(
+          description,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        subtitle: Text(
+          formatToIDR(amount),
+          style: const TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
     );
