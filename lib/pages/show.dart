@@ -13,9 +13,11 @@ class ShowDataScreen extends StatefulWidget {
 class _ShowDataScreenState extends State<ShowDataScreen> {
   List<Data> listData = [];
   APIService apiService = APIService();
+  bool isLoading = true;
   void setupData() async {
     await apiService.getData();
     setState(() {
+      isLoading = false;
       listData = apiService.items!;
     });
   }
@@ -31,15 +33,21 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: listData
-                .map((e) => CardKeuangan(
-                      description: e.description,
-                      amount: e.amount,
-                    ))
-                .toList(),
-          ),
+          child: isLoading
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 6, 22, 236),
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: listData
+                      .map((e) => CardKeuangan(
+                            description: e.description,
+                            amount: e.amount,
+                          ))
+                      .toList(),
+                ),
         ),
       ),
     );
