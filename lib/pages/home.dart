@@ -22,13 +22,18 @@ class _HomeScreenState extends State<HomeScreen> {
       TextEditingController(text: "Makan Siang");
   final TextEditingController amountController = TextEditingController();
   final TextEditingController categoryController =
-      TextEditingController(text: "Pengeluaran");
+      TextEditingController(text: "Makan");
   final TextEditingController sourceController =
-      TextEditingController(text: "Makan Siang");
+      TextEditingController(text: "Pengeluaran");
 
+  String? source;
+  int postSource = 0;
   void postData() async {
-    KeuanganPost data = createDatatoPost();
-    String status = await apiService.postData(data);
+    KeuanganPost? data = createDatatoPost();
+    String status = "Error Cek Amount";
+    if (data != null) {
+      status = await apiService.postData(data);
+    }
     setState(() {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -38,12 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  KeuanganPost createDatatoPost() {
-    return KeuanganPost(
-        desc: descController.text,
-        amount: int.parse(amountController.text),
-        category: categoryController.text,
-        source: sourceController.text);
+  KeuanganPost? createDatatoPost() {
+    return amountController.text != ""
+        ? KeuanganPost(
+            desc: descController.text,
+            amount: int.parse(amountController.text) * 1000,
+            category: categoryController.text,
+            source: postSource == 0 ? sourceController.text : source)
+        : null;
   }
 
   @override
@@ -120,6 +127,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: Text('Source'),
                       ),
                     ),
+                    RadioListTile(
+                      title: const Text("Pengeluaran"),
+                      value: "Pengeluaran",
+                      groupValue: source,
+                      onChanged: (value) {
+                        setState(() {
+                          source = value.toString();
+                          postSource = 1;
+                          postData();
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: const Text("Uang Saku Keluar"),
+                      value: "Uang Saku Keluar",
+                      groupValue: source,
+                      onChanged: (value) {
+                        setState(() {
+                          source = value.toString();
+                          postSource = 1;
+                          postData();
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -142,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text("Sending Data"),
                 ));
+                postSource = 0;
                 postData();
               },
             ),
