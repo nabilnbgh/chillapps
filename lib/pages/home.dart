@@ -1,4 +1,7 @@
 import 'package:chillapps/model/keuanganpost.dart';
+import 'package:chillapps/shared/constant.dart';
+import 'package:chillapps/shared/postdataform.dart';
+import 'package:chillapps/shared/postdropdown.dart';
 import 'package:flutter/material.dart';
 
 import '../model/apiservice.dart';
@@ -56,26 +59,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Input Data',
+          style: TextStyle(
+            fontFamily: 'Barlow',
+            fontWeight: FontWeight.w300,
+            fontSize: 24.0,
+            color: Color.fromARGB(255, 31, 39, 90),
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(16.0),
-              child: const Text(
-                'Input Data',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24.0,
-                  color: Color.fromARGB(255, 32, 33, 36),
-                ),
-              ),
-            ),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
-                side: BorderSide(
-                  color: Colors.grey.withOpacity(0.2),
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 31, 39, 90),
                   width: 1,
                 ),
               ),
@@ -85,47 +90,39 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
-                    TextFormField(
+                    PostDataForm(
                       controller: descController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text('Description'),
-                        hintText: 'Description',
-                      ),
+                      label: 'Description',
                     ),
                     const SizedBox(
                       height: 8.0,
                     ),
-                    TextFormField(
+                    PostDataForm(
                       controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Amount",
-                        label: Text('Amount'),
-                      ),
+                      label: 'Amount',
                     ),
                     const SizedBox(
                       height: 8.0,
                     ),
-                    TextFormField(
+                    PostDropDownForm(
                       controller: categoryController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Category",
-                        label: Text('Category'),
-                      ),
+                      label: 'Category',
+                      options: categoryOptions,
                     ),
                     const SizedBox(
                       height: 8.0,
                     ),
-                    TextFormField(
+                    PostDropDownForm(
                       controller: sourceController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Source",
-                        label: Text('Source'),
-                      ),
+                      label: 'Source',
+                      options: sourceOptions,
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    const Divider(
+                      height: 2,
+                      color: Colors.black,
                     ),
                     RadioListTile(
                       title: const Text("Pengeluaran"),

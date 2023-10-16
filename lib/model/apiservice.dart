@@ -1,48 +1,53 @@
 import 'dart:convert';
 
+import 'package:chillapps/model/apiresponse.dart';
 import 'package:chillapps/model/data.dart';
 import 'package:chillapps/model/keuanganpost.dart';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 // A class to get and retrieve "Keuangan" from API
 
 class APIService {
-  List<Data>? items;
-  String? status;
-  String? message;
+  String url = 'https://assorted-plausible-citrus.glitch.me/';
+  final Dio dio = Dio();
+  APIResponse apiResponse = APIResponse(status: "", message: "");
 
-  Future<void> getData() async {
-    Response response = await get(Uri.parse(
-        'https://script.google.com/macros/s/AKfycbxvZfr0PwID9B0Vte98h4-_GHl8BTb_VHU9pZKBQn5uLO_cAbVeutlacpla78doZxTeTw/exec?code=1'));
-    Map data = jsonDecode(response.body);
-    status = data['status'];
-    message = data['message'];
-    if (status == "Success") {
-      List tempList = data['items'] as List;
-      items = [];
-      for (var element in tempList) {
-        items!.add(Data(
-            description: element['description'], amount: element['amount']));
+  Future<List<Data>?> getData() async {
+    try {
+      final response = await dio.getUri(Uri.parse(
+          'https://script.google.com/macros/s/AKfycbz6Y0-lHdWftlnSoF6bbWXIFHEnaZTUBEah8_LGSP2vIE9aOf27t4pjiH8xLVPTipGTrg/exec?code=1'));
+      apiResponse = APIResponse.fromJson(response.data);
+      if (apiResponse.status == "Success") {
+        return apiResponse.items;
+      } else {
+        throw Exception("items is null");
       }
+    } catch (e) {
+      Logger().e(e);
+      return null;
     }
   }
 
   Future<String> postData(KeuanganPost data) async {
+    print(data);
     String responseBody = jsonEncode(data);
-    Response res = await post(
+    print(responseBody);
+    http.Response res = await http.post(
         Uri.parse(
-            'https://script.google.com/macros/s/AKfycbxvZfr0PwID9B0Vte98h4-_GHl8BTb_VHU9pZKBQn5uLO_cAbVeutlacpla78doZxTeTw/exec'),
+            'https://script.google.com/macros/s/AKfycbz6Y0-lHdWftlnSoF6bbWXIFHEnaZTUBEah8_LGSP2vIE9aOf27t4pjiH8xLVPTipGTrg/exec'),
         body: responseBody,
         headers: {"Content-Type": "application/json"});
     if (res.statusCode == 200) {
-      status = "Success";
+      apiResponse.status = "Success";
     } else {
       if (res.statusCode == 302) {
-        status = "Success but Moved Temporary";
+        apiResponse.status = "Success but Moved Temporary";
       } else {
-        status = "Something Went Wrong";
+        apiResponse.status = "Something Went Wrong";
       }
     }
-    return "${res.statusCode} $status";
+    return "${res.statusCode} ${apiResponse.status}";
   }
 }

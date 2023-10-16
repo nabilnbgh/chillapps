@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'keuanganpost.g.dart';
+
+@JsonSerializable(createFactory: false)
 class KeuanganPost {
   //constructor
   KeuanganPost({this.desc, this.amount, this.category, this.source});
@@ -7,10 +12,5 @@ class KeuanganPost {
   String? category;
   String? source;
 
-  Map toJson() => {
-        'description': desc,
-        'amount': amount,
-        'category': category,
-        'source': source,
-      };
+  Map<String, dynamic> toJson() => _$KeuanganPostToJson(this);
 }

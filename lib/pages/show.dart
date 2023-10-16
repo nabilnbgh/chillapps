@@ -15,17 +15,15 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
   APIService apiService = APIService();
   bool isLoading = true;
   void setupData() async {
-    await apiService.getData();
-    setState(() {
-      isLoading = false;
-      listData = apiService.items!;
-    });
+    var tempData = await apiService.getData() ?? [];
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        listData = tempData;
+      });
+    }
   }
 
-// CardKeuangan(
-//                             description: e.description,
-//                             amount: e.amount,
-//                           )
   @override
   void initState() {
     super.initState();

@@ -35,6 +35,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^1.1.0
+  dropdown_button2: ^2.3.9
+  json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
+  build_runner: ^2.4.6
+  dio: ^5.3.3
+  logger: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +90,10 @@ flutter:
           style: italic
         - asset: fonts/Poppins-Bold.ttf
           weight: 700
+    - family: Barlow
+      fonts:
+        - asset: fonts/Barlow-SemiBold.ttf
+          weight: 300
 
     # - family: Trajan Pro
     #   fonts:
